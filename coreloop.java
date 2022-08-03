@@ -22,24 +22,43 @@ public class coreloop
     public static boolean needresponce = true;
     static int player1board[][] = new int[PrintingBoardSize][PrintingBoardSize];
     static int boardgap = PrintingBoardSize - 4;
+    static boolean GameRunning = true;
     public static void main(String[] args){
-        printboard(); //prints out board
-        Scanner keyboard = new Scanner(System.in);
-        String s1; // string needed for imput from scanner
-        int xAxis = 0;
-        int yAxis = 0;
-        while(needresponce == true){
-            s1 = keyboard.nextLine();//string being filled from input
-            String inputverable[] = s1.split(",");//splitting the input
-            boolean intworking = isInt(inputverable[1]);
-            xAxis = getrow(inputverable[0], inputverable[1], intworking);
-            yAxis = getcol(inputverable[0], inputverable[1]);
-            //System.out.println(yAxis +","+ xAxis);
-            needresponce = false;
-        }//end of whileloop    
-        keyboard.close();
-        player1board[xAxis][yAxis] = 1;
-        printboard(); //prints out board
+        player1board[1][12] = 1;
+        player1board[1][13] = 1;
+        player1board[1][14] = 1;
+        player1board[1][15] = 1;
+        player1board[4][12] = 1;
+        player1board[5][12] = 1;
+        player1board[6][12] = 1;
+        player1board[7][12] = 1;
+        while (GameRunning == true){//game running start
+            printboard(); //prints out board
+            Scanner keyboard = new Scanner(System.in);
+            String s1; // string needed for imput from scanner
+            int xAxis = 0;
+            int yAxis = 0;
+            while(needresponce == true){
+                s1 = keyboard.nextLine();//string being filled from input
+                String inputverable[] = s1.split(",");//splitting the input
+                boolean intworking = isInt(inputverable[1]);
+                xAxis = getrow(inputverable[0], inputverable[1], intworking);
+                yAxis = getcol(inputverable[0], inputverable[1]);
+                //System.out.println(yAxis +","+ xAxis);
+                needresponce = false;
+            }//end of whileloop    
+            //keyboard.close();
+            if (player1board[xAxis][yAxis] == 0){
+            player1board[xAxis][yAxis] = 2;
+            }else if (player1board[xAxis][xAxis] == 1){
+                player1board[xAxis][yAxis] = 3;
+            }else{
+                System.out.println("try again");
+            }
+
+            printboard(); //prints out board
+            needresponce = true;
+        }//end of GameRunning
     }//end of main
 
 //checks if the thing being passed in is a int
@@ -89,14 +108,14 @@ public class coreloop
         clearboard();
         String gap;
         gap = " ";
-        System.out.print("hide");
+        System.out.print("seek");
         System.out.print("         ");
         for(double i=0; i <= boardgap;){
             System.out.print(gap);
             i++;
         }
 
-        System.out.println("seek");
+        System.out.println("hide");
         System.out.print("  ");
         letterline = 'a';
         for(int y=0;y<coreloop.BOARDSIZE;y++){
