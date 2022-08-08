@@ -16,25 +16,45 @@ public class coreloop
     public static int BOARDSIZE = 11;
     public static boolean playeroneturn = true;
     public static char letterline = 'a';
-    public static int PrintingBoardSize = coreloop.BOARDSIZE *2;
+    public static int PrintingBoardSize = coreloop.BOARDSIZE * 2;
     static int boardsizeonelarger = BOARDSIZE + 1;// this verable is for printing the board starting at one
     public static boolean gapinboard = true;
     public static boolean needresponce = true;
     static int player1board[][] = new int[PrintingBoardSize][PrintingBoardSize];
     static int boardgap = PrintingBoardSize - 4;
     static boolean GameRunning = true;
+    static int playonemin = 0;
+    static int playonemax = BOARDSIZE;
+    static int playtwoXmin = BOARDSIZE;
+    static int playtwoYmin = 0;
+    static int playtwoXmax = PrintingBoardSize;
+    static int playtwoYmax = BOARDSIZE+1;
+    static double numberofspotsforboard = Math.floor((BOARDSIZE * BOARDSIZE) * 0.31);
+  
     public static void main(String[] args){
-        player1board[1][12] = 1;
-        player1board[1][13] = 1;
-        player1board[1][14] = 1;
-        player1board[1][15] = 1;
-        player1board[4][12] = 1;
-        player1board[5][12] = 1;
-        player1board[6][12] = 1;
-        player1board[7][12] = 1;
+        boolean playerseekingside = true;
+        int spotsdone = 0;
+        while(spotsdone <= numberofspotsforboard && playerseekingside == true){//randomizes the seeking part of the board
+            boardfillingone(playonemin, playonemax);
+            spotsdone++;
+            if (spotsdone == numberofspotsforboard){
+                playerseekingside = false;
+            }
+        }
+        
+        spotsdone = 0;
+        while(spotsdone <= numberofspotsforboard && playerseekingside == false){//should be randomizing the locations of the hiding part of the board, but there is a bug and i can't find it
+            boardfillingtwo(playtwoXmin,playtwoYmin, playtwoXmax, playtwoYmax);
+            spotsdone++;
+            if (spotsdone == numberofspotsforboard){
+                playerseekingside = true;
+            }
+        }
+        
+       // player1board[PrintingBoardSize -1][PrintingBoardSize -1] = 5;
+        Scanner keyboard = new Scanner(System.in);
         while (GameRunning == true){//game running start
             printboard(); //prints out board
-            Scanner keyboard = new Scanner(System.in);
             String s1; // string needed for imput from scanner
             int xAxis = 0;
             int yAxis = 0;
@@ -47,7 +67,6 @@ public class coreloop
                 //System.out.println(yAxis +","+ xAxis);
                 needresponce = false;
             }//end of whileloop    
-            //keyboard.close();
             if (player1board[xAxis][yAxis] == 0){
             player1board[xAxis][yAxis] = 2;
             }else if (player1board[xAxis][xAxis] == 1){
@@ -59,6 +78,7 @@ public class coreloop
             printboard(); //prints out board
             needresponce = true;
         }//end of GameRunning
+        keyboard.close();
     }//end of main
 
 //checks if the thing being passed in is a int
@@ -119,26 +139,32 @@ public class coreloop
         System.out.print("  ");
         letterline = 'a';
         for(int y=0;y<coreloop.BOARDSIZE;y++){
-            System.out.print(letterline + " ");
+            System.out.print(letterline + gap);
             letterline++;
         }
         //prints out letter line on right side
         letterline = 'a';
         System.out.print("        ");
         for(int y=0;y<coreloop.BOARDSIZE;y++){
-            System.out.print(letterline + " ");
+            System.out.print(letterline + gap);
             letterline++;
         }
         System.out.println();
-        for(int x=1; x<boardsizeonelarger;x++) {
-            System.out.print(x + " ");
-            for(int y=0;y<PrintingBoardSize;y++){
-                if(y >= coreloop.BOARDSIZE && gapinboard == true){ //gap between boards
-                    System.out.print("      " + x + " ");
+        for(int y=1; y<boardsizeonelarger;y++) {
+            System.out.print(y + gap);
+            for(int x=0;x<PrintingBoardSize;x++){
+                if(x >= coreloop.BOARDSIZE && gapinboard == true){ //gap between boards
+                    System.out.print("      " + y + gap);
                     gapinboard = false;
                 }
-                System.out.print(player1board[x][y]+" ");
-
+                
+                if (player1board[y][x] == 0){
+                    System.out.print("  ");
+                }else{
+                    System.out.print(player1board[y][x] + gap);
+                }
+                
+                //System.out.print(player1board[y][x] + gap); 
             }
             System.out.println();
             gapinboard = true;
@@ -149,5 +175,14 @@ public class coreloop
     System.out.print("\033[H");
     System.out.print("\033[2J");
     System.out.println("\033[H");
-  }//end clearboard
+    }//end clearboard
+
+    static void boardfillingone(int min, int max){// this fills the "seek" side of the board
+        player1board[(int)Math.floor(Math.random()*(max-min)+min)][(int)Math.floor(Math.random()*(max-min)+min)] = 1;
+    }//end of boardfillingone
+    static void boardfillingtwo(int Xmin,int Ymin, int Xmax, int Ymax){//this fills the "hide" side of the board
+    int randomnumberX = (int)Math.floor(Math.random()*(Xmax-Xmin)+Xmin);
+    int randomnumberY = (int)Math.floor(Math.random()*(Ymax-Ymin)+Ymin);
+        player1board[randomnumberY][randomnumberX] = 1;
+    }//end boardfilligtwo
 }//class end
