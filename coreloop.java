@@ -17,7 +17,6 @@ public class coreloop
     public static boolean playeroneturn = true;
     public static char letterline = 'a';
     public static int PrintingBoardSize = coreloop.BOARDSIZE * 2;
-    static int boardsizeonelarger = BOARDSIZE + 1;// this verable is for printing the board starting at one
     public static boolean gapinboard = true;
     public static boolean needresponce = true;
     static int player1board[][] = new int[PrintingBoardSize][PrintingBoardSize];
@@ -28,11 +27,17 @@ public class coreloop
     static int playtwoXmin = BOARDSIZE;
     static int playtwoYmin = 0;
     static int playtwoXmax = PrintingBoardSize;
-    static int playtwoYmax = BOARDSIZE+1;
+    static int playtwoYmax = BOARDSIZE + 1;
     static double numberofspotsforboard = Math.floor((BOARDSIZE * BOARDSIZE) * 0.31);
+    
   
     public static void main(String[] args){
+        //double gameendchecker = numberofspotsforboard;
+        double spotsleftforplayer1 = numberofspotsforboard;
+        //double spotsleftforplayer2 = numberofspotsforboard;
         boolean playerseekingside = true;
+        boolean player1turn = true;
+        boolean Aiturn = false;
         int spotsdone = 0;
         while(spotsdone <= numberofspotsforboard && playerseekingside == true){//randomizes the seeking part of the board
             boardfillingone(playonemin, playonemax);
@@ -54,11 +59,14 @@ public class coreloop
        // player1board[PrintingBoardSize -1][PrintingBoardSize -1] = 5;
         Scanner keyboard = new Scanner(System.in);
         while (GameRunning == true){//game running start
-            printboard(); //prints out board
+            printboard();
+            if (spotsleftforplayer1 == 0){
+                GameRunning = false;
+            }
             String s1; // string needed for imput from scanner
             int xAxis = 0;
             int yAxis = 0;
-            while(needresponce == true){
+            while(needresponce == true && player1turn == true){
                 s1 = keyboard.nextLine();//string being filled from input
                 String inputverable[] = s1.split(",");//splitting the input
                 boolean intworking = isInt(inputverable[1]);
@@ -67,14 +75,36 @@ public class coreloop
                 //System.out.println(yAxis +","+ xAxis);
                 needresponce = false;
             }//end of whileloop    
-            if (player1board[xAxis][yAxis] == 0){
+            if (player1board[xAxis][yAxis] == 0){//searched but not found
             player1board[xAxis][yAxis] = 2;
-            }else if (player1board[xAxis][xAxis] == 1){
+            player1turn = false;
+            Aiturn = true;
+            }else if (player1board[xAxis][xAxis] == 1 && playeroneturn == true){//found
                 player1board[xAxis][yAxis] = 3;
+                spotsleftforplayer1--;
+                player1turn = false;
+                Aiturn = true;
             }else{
                 System.out.println("try again");
             }
-
+            //Ai code, causes the code to check if the player has done somethnig wrong to go off over and over again
+            
+            while (player1turn == false  ){
+                int randomnumberX = 0;
+                int randomnumberY = 0;
+                randomnumberX = (int)Math.floor(Math.random()*(playtwoXmax-playtwoXmin)+playtwoXmin);
+                randomnumberY = (int)Math.floor(Math.random()*(playtwoYmax-playtwoYmin)+playtwoYmin);
+                        if (player1board[randomnumberY][randomnumberX] == 0){//miss
+                            player1board[randomnumberY][randomnumberX] = 2;
+                            player1turn = true;
+                            Aiturn = false;
+                        } else if (player1board[randomnumberY][randomnumberX] == 1){//hit
+                            player1board[randomnumberY][randomnumberX] = 3;
+                            player1turn = true;
+                            Aiturn = false;
+                        }
+            }
+            player1turn = true;
             printboard(); //prints out board
             needresponce = true;
         }//end of GameRunning
@@ -150,7 +180,7 @@ public class coreloop
             letterline++;
         }
         System.out.println();
-        for(int y=1; y<boardsizeonelarger;y++) {
+        for(int y=0; y<BOARDSIZE;y++) {
             System.out.print(y + gap);
             for(int x=0;x<PrintingBoardSize;x++){
                 if(x >= coreloop.BOARDSIZE && gapinboard == true){ //gap between boards
@@ -159,7 +189,7 @@ public class coreloop
                 }
                 
                 if (player1board[y][x] == 0){
-                    System.out.print("  ");
+                    System.out.print("0 ");
                 }else{
                     System.out.print(player1board[y][x] + gap);
                 }
@@ -169,6 +199,9 @@ public class coreloop
             System.out.println();
             gapinboard = true;
         }//end of for loop
+        System.out.println("1 == something");
+        System.out.println("2 == nothing there");
+        System.out.println("3 == found something");
     }//end of printboard
 
     static void clearboard(){//this clears the screen
@@ -178,11 +211,29 @@ public class coreloop
     }//end clearboard
 
     static void boardfillingone(int min, int max){// this fills the "seek" side of the board
-        player1board[(int)Math.floor(Math.random()*(max-min)+min)][(int)Math.floor(Math.random()*(max-min)+min)] = 1;
+        boolean randomnumberneeded = true;
+        int randomnumberX = 0;
+        int randomnumberY = 0;
+        while (randomnumberneeded == true){
+            randomnumberX = (int)Math.floor(Math.random()*(max-min)+min);
+            randomnumberY = (int)Math.floor(Math.random()*(max-min)+min);
+            if (player1board[randomnumberX][randomnumberY] == 0){
+                randomnumberneeded = false;
+                player1board[randomnumberX][randomnumberY] = 1;
+            }
+        }
     }//end of boardfillingone
     static void boardfillingtwo(int Xmin,int Ymin, int Xmax, int Ymax){//this fills the "hide" side of the board
-    int randomnumberX = (int)Math.floor(Math.random()*(Xmax-Xmin)+Xmin);
-    int randomnumberY = (int)Math.floor(Math.random()*(Ymax-Ymin)+Ymin);
-        player1board[randomnumberY][randomnumberX] = 1;
+        int randomnumberX = 0;
+        int randomnumberY = 0;
+        boolean randomnumberneeded = true;
+        while (randomnumberneeded == true){
+            randomnumberX = (int)Math.floor(Math.random()*(Xmax-Xmin)+Xmin);
+            randomnumberY = (int)Math.floor(Math.random()*(Ymax-Ymin)+Ymin);
+            if (player1board[randomnumberY][randomnumberX] == 0){
+                randomnumberneeded = false;
+                player1board[randomnumberY][randomnumberX] = 1;
+            }
+        }
     }//end boardfilligtwo
 }//class end
