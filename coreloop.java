@@ -34,11 +34,12 @@ public class coreloop
     public static void main(String[] args){
         //double gameendchecker = numberofspotsforboard;
         double spotsleftforplayer1 = numberofspotsforboard;
-        //double spotsleftforplayer2 = numberofspotsforboard;
+        double spotsleftforplayer2 = numberofspotsforboard;
         boolean playerseekingside = true;
         boolean player1turn = true;
-        boolean Aiturn = false;
         int spotsdone = 0;
+        boolean playerwin = false;
+        boolean AIwin = false;
         while(spotsdone <= numberofspotsforboard && playerseekingside == true){//randomizes the seeking part of the board
             boardfillingone(playonemin, playonemax);
             spotsdone++;
@@ -60,55 +61,73 @@ public class coreloop
         Scanner keyboard = new Scanner(System.in);
         while (GameRunning == true){//game running start
             printboard();
-            if (spotsleftforplayer1 == 0){
-                GameRunning = false;
-            }
             String s1; // string needed for imput from scanner
             int xAxis = 0;
             int yAxis = 0;
+            boolean acceptedinput = true;
             while(needresponce == true && player1turn == true){
                 s1 = keyboard.nextLine();//string being filled from input
                 String inputverable[] = s1.split(",");//splitting the input
-                boolean intworking = isInt(inputverable[1]);
-                xAxis = getrow(inputverable[0], inputverable[1], intworking);
+                boolean intworking1 = isInt(inputverable[1]);
+                boolean intworking2 = isInt(inputverable[0]);
+                xAxis = getrow(inputverable[0], inputverable[1], intworking1, intworking2);
+                if (xAxis == PrintingBoardSize +1){
+                    acceptedinput = false;
+                }
                 yAxis = getcol(inputverable[0], inputverable[1]);
                 //System.out.println(yAxis +","+ xAxis);
                 needresponce = false;
             }//end of whileloop    
-            if (player1board[xAxis][yAxis] == 0){//searched but not found
-            player1board[xAxis][yAxis] = 2;
-            player1turn = false;
-            Aiturn = true;
-            }else if (player1board[xAxis][xAxis] == 1 && playeroneturn == true){//found
-                player1board[xAxis][yAxis] = 3;
-                spotsleftforplayer1--;
+            if (acceptedinput == true){
+                if (player1board[xAxis][yAxis] == 0){//searched but not found
+                player1board[xAxis][yAxis] = 2;
                 player1turn = false;
-                Aiturn = true;
-            }else{
+                }else if (player1board[xAxis][yAxis] == 1 && playeroneturn == true){//found
+                    player1board[xAxis][yAxis] = 3;
+                    spotsleftforplayer1--;
+                    player1turn = false;
+                }else{
+                    System.out.println("try again");
+                }
+            }else {
                 System.out.println("try again");
             }
             //Ai code, causes the code to check if the player has done somethnig wrong to go off over and over again
             
-            while (player1turn == false  ){
+            while (player1turn == false){
                 int randomnumberX = 0;
                 int randomnumberY = 0;
                 randomnumberX = (int)Math.floor(Math.random()*(playtwoXmax-playtwoXmin)+playtwoXmin);
                 randomnumberY = (int)Math.floor(Math.random()*(playtwoYmax-playtwoYmin)+playtwoYmin);
-                        if (player1board[randomnumberY][randomnumberX] == 0){//miss
-                            player1board[randomnumberY][randomnumberX] = 2;
-                            player1turn = true;
-                            Aiturn = false;
-                        } else if (player1board[randomnumberY][randomnumberX] == 1){//hit
-                            player1board[randomnumberY][randomnumberX] = 3;
-                            player1turn = true;
-                            Aiturn = false;
-                        }
+                if (player1board[randomnumberY][randomnumberX] == 0){//miss
+                    player1board[randomnumberY][randomnumberX] = 2;
+                    player1turn = true;
+                } else if (player1board[randomnumberY][randomnumberX] == 1){//hit
+                    player1board[randomnumberY][randomnumberX] = 3;
+                    player1turn = true;
+                    spotsleftforplayer2--;
+                }
             }
             player1turn = true;
             printboard(); //prints out board
             needresponce = true;
+            if (spotsleftforplayer1 == 0){
+                GameRunning = false;
+                playerwin = true;
+            }
+            if (spotsleftforplayer2 == 0){
+                GameRunning = false;
+                AIwin = true;
+            }
         }//end of GameRunning
         keyboard.close();
+        if (playerwin == true){
+            System.out.println("well done player, you have won");
+        } else if (AIwin == true){
+            System.out.println("saddly the AI won, better luck next time");
+        }else{
+            System.out.println("how did you manage this one?");
+        }
     }//end of main
 
 //checks if the thing being passed in is a int
@@ -126,7 +145,7 @@ public class coreloop
    }//end of isInt
 
 //gets the colem
-   static int getcol (String coord1, String coord2){
+   static int getcol (String coord1, String coord2){//this turns the string into a char
         char col = coord1.charAt(0);
         if (col >= 'a' && col <= 'a' + coreloop.BOARDSIZE){
             return col - 'a';
@@ -137,13 +156,15 @@ public class coreloop
         }//end of if statment
     }//end of getcol
     
-    static int getrow (String coord1, String coord2, boolean working){
+    static int getrow (String coord1, String coord2, boolean working1, boolean working2){//this turns the string into a int
         int row;
-        if(working == true){
+        if(working1 == true && working2 == false){
             row = Integer.parseInt(coord2);
-        }else {
+        }else if (working1 == false && working2 == true) {
             row = Integer.parseInt(coord1);
-        }//end of if statment
+        }else {
+            return PrintingBoardSize +1;
+        }
         
         if (row >= 0 && row <= 10 + BOARDSIZE){
             return row;
@@ -189,12 +210,14 @@ public class coreloop
                 }
                 
                 if (player1board[y][x] == 0){
-                    System.out.print("0 ");
+                    System.out.print("  ");
+                }else if(x <= BOARDSIZE && y <= BOARDSIZE && player1board[y][x] == 1){
+                    System.out.print("  ");
                 }else{
                     System.out.print(player1board[y][x] + gap);
                 }
                 
-                //System.out.print(player1board[y][x] + gap); 
+                //System.out.print(player1board[y][x] + gap);
             }
             System.out.println();
             gapinboard = true;
@@ -202,12 +225,11 @@ public class coreloop
         System.out.println("1 == something");
         System.out.println("2 == nothing there");
         System.out.println("3 == found something");
+        System.out.println("input should be number,letter");
     }//end of printboard
 
     static void clearboard(){//this clears the screen
-    System.out.print("\033[H");
-    System.out.print("\033[2J");
-    System.out.println("\033[H");
+  
     }//end clearboard
 
     static void boardfillingone(int min, int max){// this fills the "seek" side of the board
