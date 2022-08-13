@@ -10,7 +10,7 @@ public class coreloop
 {
 
     // instance variables - replace the example below with your own
-    public static int BOARDSIZE = 11;
+    public static int BOARDSIZE = 9;
     public static boolean playeroneturn = true;
     public static char letterline = 'a';
     public static int PrintingBoardSize = coreloop.BOARDSIZE * 2;
@@ -28,6 +28,7 @@ public class coreloop
     static double numberofspotsforboard = Math.floor((BOARDSIZE * BOARDSIZE) * 0.31);
     static boolean acceptedinput = true;
     static int instructionsnumberofspots = (int)numberofspotsforboard;
+    static boolean checkedherealready = false;
     public static void main(String[] args){
         //double gameendchecker = numberofspotsforboard;
         double spotsleftforplayer1 = numberofspotsforboard;
@@ -59,6 +60,7 @@ public class coreloop
         while (GameRunning == true){//game running start
             printboard();
             acceptedinput = true;
+            checkedherealready = false;
             String s1; // string needed for imput from scanner
             int xAxis = 0;
             int yAxis = 0;
@@ -95,7 +97,7 @@ public class coreloop
                     spotsleftforplayer1--;
                     player1turn = false;
                 }else{
-                    System.out.println("try again");
+                    checkedherealready = true;
                 }
             }else {
                 System.out.println("try again");
@@ -108,10 +110,10 @@ public class coreloop
                 int randomnumberY = 0;
                 randomnumberX = (int)Math.floor(Math.random()*(playtwoXmax-playtwoXmin)+playtwoXmin);
                 randomnumberY = (int)Math.floor(Math.random()*(playtwoYmax-playtwoYmin)+playtwoYmin);
-                if (player1board[randomnumberY][randomnumberX] == 0){//miss
+                if (player1board[randomnumberY][randomnumberX] == 0){//searched but not found
                     player1board[randomnumberY][randomnumberX] = 2;
                     player1turn = true;
-                } else if (player1board[randomnumberY][randomnumberX] == 1){//hit
+                } else if (player1board[randomnumberY][randomnumberX] == 1){//found
                     player1board[randomnumberY][randomnumberX] = 3;
                     player1turn = true;
                     spotsleftforplayer2--;
@@ -135,7 +137,7 @@ public class coreloop
         } else if (AIwin == true){
             System.out.println("saddly the AI won, better luck next time");
         }else{
-            System.out.println("how did you manage this one?");
+            System.out.println("how did you manage this one? I guess you tied?");
         }
     }//end of main
 
@@ -253,9 +255,12 @@ public class coreloop
             System.out.println();
             gapinboard = true;
         }//end of for loop
-        System.out.println("1 == something");
+        System.out.println("1 == a hider");
         System.out.println("2 == nothing there");
         System.out.println("3 == found something");
+        if (checkedherealready == true){
+            System.out.println("you have already checked here, try again");
+        }
         System.out.println("Please enter a location input as letter,number");
         if (acceptedinput == false){
             System.out.println("the last input you did was incorrect, please try again");
