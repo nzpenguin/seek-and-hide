@@ -63,19 +63,27 @@ public class coreloop
             String s1; // string needed for imput from scanner
             int xAxis = 0;
             int yAxis = 0;
+            boolean intworking1 = false;
+            boolean intworking2 = false;
             //boolean acceptedinput = true;
             while(needresponce == true && player1turn == true){
                 s1 = keyboard.nextLine();//string being filled from input
                 String inputverable[] = s1.split(",");//splitting the input
-                boolean intworking1 = isInt(inputverable[1]);
-                boolean intworking2 = isInt(inputverable[0]);
-                xAxis = getrow(inputverable[0], inputverable[1], intworking1, intworking2);
-                if (xAxis == PrintingBoardSize +1){
+                if (inputverable.length != 2){
                     acceptedinput = false;
-                }else {
-                    acceptedinput = true;
                 }
-                yAxis = getcol(inputverable[0], inputverable[1]);
+                if (acceptedinput == true){
+                    intworking1 = isInt(inputverable[1]);
+                    intworking2 = isInt(inputverable[0]);
+                    xAxis = getrow(inputverable[0], inputverable[1], intworking1, intworking2);
+                    yAxis = getcol(inputverable[0], inputverable[1]);
+                    if (xAxis == PrintingBoardSize +1 || yAxis == PrintingBoardSize + 1){
+                        acceptedinput = false;
+                    }else {
+                        acceptedinput = true;
+                    }
+                }
+                
                 //System.out.println(yAxis +","+ xAxis);
                 needresponce = false;
             }//end of whileloop    
@@ -148,12 +156,14 @@ public class coreloop
 //gets the colem
    static int getcol (String coord1, String coord2){//this turns the string into a char
         char col = coord1.charAt(0);
-        if (col >= 'a' && col <= 'a' + coreloop.BOARDSIZE){
+        if (col >= 'a' && col <= 'a' + (BOARDSIZE - 1)){
             return col - 'a';
         }else { col = coord2.charAt(0);
-            if (col >='a' && col <= 'a' + coreloop.BOARDSIZE) {
+            if (col >='a' && col <= 'a' + (BOARDSIZE - 1)) {
                 return col - 'a';
-            }else {return -1;}
+            }else {
+                return  PrintingBoardSize +1;
+            }
         }//end of if statment
     }//end of getcol
     
@@ -178,10 +188,10 @@ public class coreloop
 
     static void printboard(){//printsboard
         clearboard();
-        System.out.println("hello, this is a game of hide and seek,");
-        System.out.println("the board labbled hide is where your people are hiding in");
-        System.out.println("the board labbled seek is where you are trying to find people in");
-        System.out.println("there are " + numberofspotsforboard + " hiding in the seek board at the start of the game, good luck");
+        System.out.println("Hello, this is a game of hide and seek,");
+        System.out.println("The board labbled hide is where your people are hiding in");
+        System.out.println("The board labbled seek is where you are trying to find people in");
+        System.out.println("There are " + numberofspotsforboard + " hiding in the seek board at the start of the game, good luck");
         System.out.println();
         String gap;
         gap = " ";
@@ -193,7 +203,7 @@ public class coreloop
         }
 
         System.out.println("hide");
-        System.out.print("  ");
+        System.out.print("   ");
         letterline = 'a';
         for(int y=0;y<coreloop.BOARDSIZE;y++){
             System.out.print(letterline + gap);
@@ -208,10 +218,18 @@ public class coreloop
         }
         System.out.println();
         for(int y=0; y<BOARDSIZE;y++) {
-            System.out.print(y + gap);
+            if ( y < 10){
+                System.out.print(" " + y + gap);
+            }else {
+                System.out.print(y + gap);
+            }
             for(int x=0;x<PrintingBoardSize;x++){
                 if(x >= coreloop.BOARDSIZE && gapinboard == true){ //gap between boards
-                    System.out.print("      " + y + gap);
+                    if ( y < 10){
+                        System.out.print("      " + y + gap);
+                    }else {
+                        System.out.print("     " + y + gap);
+                    }
                     gapinboard = false;
                 }
                 
@@ -231,7 +249,7 @@ public class coreloop
         System.out.println("1 == something");
         System.out.println("2 == nothing there");
         System.out.println("3 == found something");
-        System.out.println("input should be number,letter");
+        System.out.println("Please enter location input as letter,number");
         if (acceptedinput == false){
             System.out.println("the last input you did was incorrect, please try again");
         }
