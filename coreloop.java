@@ -29,8 +29,7 @@ public class coreloop
     static int playtwoXmax = PrintingBoardSize;
     static int playtwoYmax = BOARDSIZE + 1;
     static double numberofspotsforboard = Math.floor((BOARDSIZE * BOARDSIZE) * 0.31);
-    
-  
+    static boolean acceptedinput = true;
     public static void main(String[] args){
         //double gameendchecker = numberofspotsforboard;
         double spotsleftforplayer1 = numberofspotsforboard;
@@ -64,7 +63,7 @@ public class coreloop
             String s1; // string needed for imput from scanner
             int xAxis = 0;
             int yAxis = 0;
-            boolean acceptedinput = true;
+            //boolean acceptedinput = true;
             while(needresponce == true && player1turn == true){
                 s1 = keyboard.nextLine();//string being filled from input
                 String inputverable[] = s1.split(",");//splitting the input
@@ -73,6 +72,8 @@ public class coreloop
                 xAxis = getrow(inputverable[0], inputverable[1], intworking1, intworking2);
                 if (xAxis == PrintingBoardSize +1){
                     acceptedinput = false;
+                }else {
+                    acceptedinput = true;
                 }
                 yAxis = getcol(inputverable[0], inputverable[1]);
                 //System.out.println(yAxis +","+ xAxis);
@@ -177,6 +178,11 @@ public class coreloop
 
     static void printboard(){//printsboard
         clearboard();
+        System.out.println("hello, this is a game of hide and seek,");
+        System.out.println("the board labbled hide is where your people are hiding in");
+        System.out.println("the board labbled seek is where you are trying to find people in");
+        System.out.println("there are " + numberofspotsforboard + " hiding in the seek board at the start of the game, good luck");
+        System.out.println();
         String gap;
         gap = " ";
         System.out.print("seek");
@@ -226,10 +232,15 @@ public class coreloop
         System.out.println("2 == nothing there");
         System.out.println("3 == found something");
         System.out.println("input should be number,letter");
+        if (acceptedinput == false){
+            System.out.println("the last input you did was incorrect, please try again");
+        }
     }//end of printboard
 
     static void clearboard(){//this clears the screen
-  
+        System.out.println("\033[H");
+        System.out.println("\033[2J");
+        System.out.println("\033[H");
     }//end clearboard
 
     static void boardfillingone(int min, int max){// this fills the "seek" side of the board
