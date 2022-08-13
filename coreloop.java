@@ -73,10 +73,10 @@ public class coreloop
                     acceptedinput = false;
                 }
                 if (acceptedinput == true){
-                    intworking1 = isInt(inputverable[1]);
-                    intworking2 = isInt(inputverable[0]);
+                    intworking1 = isInt(inputverable[0]);
+                    intworking2 = isInt(inputverable[1]);
                     xAxis = getrow(inputverable[0], inputverable[1], intworking1, intworking2);
-                    yAxis = getcol(inputverable[0], inputverable[1]);
+                    yAxis = getcol(inputverable[0], inputverable[1], intworking1, intworking2);
                     if (xAxis == PrintingBoardSize +1 || yAxis == PrintingBoardSize + 1){
                         acceptedinput = false;
                     }else {
@@ -101,6 +101,7 @@ public class coreloop
             }else {
                 System.out.println("try again");
             }
+            acceptedinput = true;
             //Ai code, causes the code to check if the player has done somethnig wrong to go off over and over again
             
             while (player1turn == false){
@@ -154,8 +155,15 @@ public class coreloop
    }//end of isInt
 
 //gets the colem
-   static int getcol (String coord1, String coord2){//this turns the string into a char
-        char col = coord1.charAt(0);
+   static int getcol (String coord1, String coord2, boolean working1, boolean working2){//this turns the string into a char
+      char col = 0;
+        if (working1 == true && working2 == false && coord2.length() == 1){
+            col  = coord2.charAt(0);
+        }else if (working1 == false && working2 == true && coord1.length() == 1) {
+                col = coord1.charAt(0);
+        }else{
+                return PrintingBoardSize +1;
+        }
         if (col >= 'a' && col <= 'a' + (BOARDSIZE - 1)){
             return col - 'a';
         }else { col = coord2.charAt(0);
@@ -170,9 +178,9 @@ public class coreloop
     static int getrow (String coord1, String coord2, boolean working1, boolean working2){//this turns the string into a int
         int row;
         if(working1 == true && working2 == false){
-            row = Integer.parseInt(coord2);
-        }else if (working1 == false && working2 == true) {
             row = Integer.parseInt(coord1);
+        }else if (working1 == false && working2 == true) {
+            row = Integer.parseInt(coord2);
         }else {
             return PrintingBoardSize +1;
         }
