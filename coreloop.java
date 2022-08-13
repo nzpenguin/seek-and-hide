@@ -6,9 +6,6 @@
  * @version 15/06/2022)
  */
 import java.util.Scanner;//the scanner
-import java.io.File; // file stuffs
-import java.io.IOException;
-import java.io.FileWriter;// to write the files
 public class coreloop
 {
 
@@ -84,7 +81,7 @@ public class coreloop
                     }
                 }
                 
-                //System.out.println(yAxis +","+ xAxis);
+                //System.out.println(yAxis +","+ xAxis); this was debug code
                 needresponce = false;
             }//end of whileloop    
             if (acceptedinput == true){
@@ -102,6 +99,7 @@ public class coreloop
                 System.out.println("try again");
             }
             acceptedinput = true;
+
             //Ai code, causes the code to check if the player has done somethnig wrong to go off over and over again
             
             while (player1turn == false){
@@ -157,12 +155,12 @@ public class coreloop
 //gets the colem
    static int getcol (String coord1, String coord2, boolean working1, boolean working2){//this turns the string into a char
       char col = 0;
-        if (working1 == true && working2 == false && coord2.length() == 1){
+        if (working1 == true && working2 == false && coord2.length() == 1){//this checks if either of the strings have already been checked for being ints and then rules them out for being accepted inputs
             col  = coord2.charAt(0);
         }else if (working1 == false && working2 == true && coord1.length() == 1) {
-                col = coord1.charAt(0);
+            col = coord1.charAt(0);
         }else{
-                return PrintingBoardSize +1;
+                return PrintingBoardSize + 1;
         }
         if (col >= 'a' && col <= 'a' + (BOARDSIZE - 1)){
             return col - 'a';
@@ -170,7 +168,7 @@ public class coreloop
             if (col >='a' && col <= 'a' + (BOARDSIZE - 1)) {
                 return col - 'a';
             }else {
-                return  PrintingBoardSize +1;
+                return  PrintingBoardSize + 1;
             }
         }//end of if statment
     }//end of getcol
