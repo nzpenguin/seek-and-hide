@@ -27,6 +27,7 @@ public class coreloop
     static int playtwoYmax = BOARDSIZE + 1;
     static double numberofspotsforboard = Math.floor((BOARDSIZE * BOARDSIZE) * 0.31);
     static boolean acceptedinput = true;
+    static int instructionsnumberofspots = (int)numberofspotsforboard;
     public static void main(String[] args){
         //double gameendchecker = numberofspotsforboard;
         double spotsleftforplayer1 = numberofspotsforboard;
@@ -57,6 +58,7 @@ public class coreloop
         Scanner keyboard = new Scanner(System.in);
         while (GameRunning == true){//game running start
             printboard();
+            acceptedinput = true;
             String s1; // string needed for imput from scanner
             int xAxis = 0;
             int yAxis = 0;
@@ -98,7 +100,6 @@ public class coreloop
             }else {
                 System.out.println("try again");
             }
-            acceptedinput = true;
 
             //Ai code, causes the code to check if the player has done somethnig wrong to go off over and over again
             
@@ -197,7 +198,7 @@ public class coreloop
         System.out.println("Hello, this is a game of hide and seek,");
         System.out.println("The board labbled hide is where your people are hiding in");
         System.out.println("The board labbled seek is where you are trying to find people in");
-        System.out.println("There are " + numberofspotsforboard + " hiding in the seek board at the start of the game, good luck");
+        System.out.println("There are " + instructionsnumberofspots + " hiding in the seek board at the start of the game, good luck");
         System.out.println();
         String gap;
         gap = " ";
@@ -255,7 +256,7 @@ public class coreloop
         System.out.println("1 == something");
         System.out.println("2 == nothing there");
         System.out.println("3 == found something");
-        System.out.println("Please enter location input as letter,number");
+        System.out.println("Please enter a location input as letter,number");
         if (acceptedinput == false){
             System.out.println("the last input you did was incorrect, please try again");
         }
