@@ -271,7 +271,6 @@ public class coreloop
         if (acceptedinput == false){
             System.out.println("the last input you did was incorrect, please try again");
         }
-        System.out.println(howlongboardsize);
     }//end of printboard
 
     static void clearboard(){//this clears the screen
