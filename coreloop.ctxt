@@ -1,6 +1,19 @@
 #BlueJ class context
 comment0.target=coreloop
-comment1.params=
-comment1.target=coreloop()
-comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ coreloop\r\n
-numComments=2
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment2.params=possibleInteger
+comment2.target=boolean\ isInt(java.lang.String)
+comment3.params=coord1\ coord2\ working1\ working2
+comment3.target=int\ getcol(java.lang.String,\ java.lang.String,\ boolean,\ boolean)
+comment4.params=coord1\ coord2\ working1\ working2
+comment4.target=int\ getrow(java.lang.String,\ java.lang.String,\ boolean,\ boolean)
+comment5.params=
+comment5.target=void\ printboard()
+comment6.params=
+comment6.target=void\ clearboard()
+comment7.params=min\ max
+comment7.target=void\ boardfillingone(int,\ int)
+comment8.params=Xmin\ Ymin\ Xmax\ Ymax
+comment8.target=void\ boardfillingtwo(int,\ int,\ int,\ int)
+numComments=9

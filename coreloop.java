@@ -29,6 +29,7 @@ public class coreloop
     static boolean acceptedinput = true;
     static int instructionsnumberofspots = (int)numberofspotsforboard;
     static boolean checkedherealready = false;
+    static double howlongboardsize = (Math.floor(Math.log10(BOARDSIZE))) + 1;
     public static void main(String[] args){
         //double gameendchecker = numberofspotsforboard;
         double spotsleftforplayer1 = numberofspotsforboard;
@@ -57,12 +58,12 @@ public class coreloop
         
        // player1board[PrintingBoardSize -1][PrintingBoardSize -1] = 5;
         Scanner keyboard = new Scanner(System.in);
-        while (GameRunning == true){//game running start
+        while (GameRunning == true){//game running start, this is the main game loop.
             printboard();
             acceptedinput = true;
             checkedherealready = false;
-            String s1; // string needed for imput from scanner
-            int xAxis = 0;
+            String s1; // string needed for input from scanner
+            int xAxis = 0;//this resets the X and Y axis verables 
             int yAxis = 0;
             boolean intworking1 = false;
             boolean intworking2 = false;
@@ -178,10 +179,13 @@ public class coreloop
     
     static int getrow (String coord1, String coord2, boolean working1, boolean working2){//this turns the string into a int
         int row;
-        if(working1 == true && working2 == false){
+        int whatoneisworking = 0;
+        if(working1 == true && working2 == false && coord1.length() == howlongboardsize){
             row = Integer.parseInt(coord1);
-        }else if (working1 == false && working2 == true) {
+            whatoneisworking = 1;
+        }else if (working1 == false && working2 == true && coord2.length() == howlongboardsize) {
             row = Integer.parseInt(coord2);
+            whatoneisworking = 2;
         }else {
             return PrintingBoardSize +1;
         }
@@ -191,8 +195,11 @@ public class coreloop
         }else {row = Integer.parseInt(coord1);
             if (row >=0 && row <= BOARDSIZE) {
                 return row -1 ;
-            }else {return -1;}
-        }//end of if statement
+            } else {
+                return PrintingBoardSize +1;
+            }
+        }
+            //end of if statement
     }//end of getrow
 
     static void printboard(){//printsboard
@@ -265,6 +272,7 @@ public class coreloop
         if (acceptedinput == false){
             System.out.println("the last input you did was incorrect, please try again");
         }
+        System.out.println(howlongboardsize);
     }//end of printboard
 
     static void clearboard(){//this clears the screen
