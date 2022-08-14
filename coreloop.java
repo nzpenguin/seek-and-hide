@@ -179,17 +179,16 @@ public class coreloop
     
     static int getrow (String coord1, String coord2, boolean working1, boolean working2){//this turns the string into a int
         int row;
-        int whatoneisworking = 0;
         if(working1 == true && working2 == false && coord1.length() == howlongboardsize){
             row = Integer.parseInt(coord1);
-            whatoneisworking = 1;
         }else if (working1 == false && working2 == true && coord2.length() == howlongboardsize) {
             row = Integer.parseInt(coord2);
-            whatoneisworking = 2;
         }else {
             return PrintingBoardSize +1;
         }
-        
+        if(row >= BOARDSIZE){
+            return PrintingBoardSize +1;
+        }
         if (row >= 0 && row <= 10 + BOARDSIZE){
             return row;
         }else {row = Integer.parseInt(coord1);
