@@ -252,8 +252,12 @@ public class coreloop
                     System.out.print("  ");
                 }else if(x <= BOARDSIZE && y <= BOARDSIZE && player1board[y][x] == 1){
                     System.out.print("  ");
-                }else{
-                    System.out.print(player1board[y][x] + gap);
+                }else if (player1board[y][x] == 1){
+                    System.out.print("#" + gap);
+                }else if (player1board[y][x] == 2){
+                    System.out.print("X" + gap);
+                }else if (player1board[y][x] == 3){
+                    System.out.print("O" + gap);
                 }
                 
                 //System.out.print(player1board[y][x] + gap);
@@ -261,9 +265,9 @@ public class coreloop
             System.out.println();
             gapinboard = true;
         }//end of for loop
-        System.out.println("1 == a hider");
-        System.out.println("2 == nothing there");
-        System.out.println("3 == found something");
+        System.out.println("# == a hider");
+        System.out.println("X == nothing there");
+        System.out.println("O == found something");
         if (checkedherealready == true){
             System.out.println("you have already checked here, try again");
         }
